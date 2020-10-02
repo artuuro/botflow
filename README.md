@@ -1,6 +1,5 @@
 # BotFlow
-Standalone JavaScript (nodejs) library that accepts `Twilio Studio` (https://www.twilio.com/console/studio) JSON configuration files
-and provides the same functionality on an independent back-end service.
+JavaScript (nodejs) library that accepts `Twilio Studio` (https://www.twilio.com/console/studio) JSON configuration files and provides the same functionality on an independent back-end service.
 
 ### Features
 - Fully Supports text-based Twilio Studio JSON configurations;
