@@ -45,9 +45,9 @@ const instance = new BotFlow(
 - `handlebars` https://handlebarsjs.com/
 
 
-#### TODOs:
-- Write a documentation;
-- Improvements and more customization options;
+#### TODO's:
+- Write more specific documentation
+- Improvements
 
 Notes: 
 - Project is heavily inspired by Twilio Studio and Chatflows as on https://www.twilio.com/console/studio.
