@@ -1,0 +1,226 @@
+
+{
+  "description": "Bot Survey",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "next": "first_question",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "first_question",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "check_response_1",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "body": "On a scale of 1-10, how would you rate today's session overall?",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "check_response_1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "unknown_answer_1",
+          "event": "noMatch"
+        },
+        {
+          "next": "second_question",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1-10",
+              "arguments": [
+                "{{widgets.first_question.inbound.Body}}"
+              ],
+              "type": "regex",
+              "value": "^(?:[1-9]|0[1-9]|10)$"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.first_question.inbound.Body}}"
+      }
+    },
+    {
+      "name": "unknown_answer_1",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "first_question",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "I'm sorry, I didn't understand. Please enter a number from 1 - 10."
+      }
+    },
+    {
+      "name": "second_question",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "check_response_2",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "body": "On a scale of 1-10, how likely are you to recommend this workshop to a friend?",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "check_response_2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "unknown_answer_2",
+          "event": "noMatch"
+        },
+        {
+          "next": "third_question",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1-10",
+              "arguments": [
+                "{{widgets.second_question.inbound.Body}}"
+              ],
+              "type": "regex",
+              "value": "^(?:[1-9]|0[1-9]|10)$"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.second_question.inbound.Body}}"
+      }
+    },
+    {
+      "name": "unknown_answer_2",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "second_question",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "I'm sorry, I didn't understand. Please enter a number from 1 - 10."
+      }
+    },
+    {
+      "name": "third_question",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "send_results_to_server",
+          "event": "incomingMessage"
+        },
+        {
+          "next": "send_results_to_server",
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "body": "Is there any other feedback you would like to share with us today?",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "thank_you",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Thank you so much for your feedback!"
+      }
+    },
+    {
+      "name": "send_results_to_server",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "thank_you",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "method": "POST",
+        "parameters": [
+          {
+            "value": "{{widgets.first_question.inbound.Body}} ",
+            "key": "question1"
+          },
+          {
+            "value": "{{widgets.second_question.inbound.Body}} ",
+            "key": "question2"
+          },
+          {
+            "value": "{{widgets.third_question.inbound.Body}} ",
+            "key": "question3"
+          }
+        ],
+        "url": "https://jsonplaceholder.typicode.com/posts"
+      }
+    }
+  ],
+  "initial_state": "Trigger"
+}

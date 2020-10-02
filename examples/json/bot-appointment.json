@@ -1,0 +1,173 @@
+{
+  "description": "Bot Appointment",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "next": "confirm_appt",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {}
+    },
+    {
+      "name": "confirm_appt",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "split_confirmation",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "body": "Your appointment is coming up on {{flow.data.appointment_time}}. Please reply 1 to confirm and 2 to cancel.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "split_confirmation",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "send_no_match",
+          "event": "noMatch"
+        },
+        {
+          "next": "confirmation_webhook",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "1",
+              "arguments": [
+                "{{widgets.confirm_appt.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "cancellation_webhook",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "2",
+              "arguments": [
+                "{{widgets.confirm_appt.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.confirm_appt.inbound.Body}}"
+      }
+    },
+    {
+      "name": "send_confirmation_sms",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Thanks! See you at the office."
+      }
+    },
+    {
+      "name": "send_cancellation_sms",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "We understand that plans change. Thanks for letting us know!"
+      }
+    },
+    {
+      "name": "send_no_match",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "confirm_appt",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "We're sorry, we couldn't understand your response."
+      }
+    },
+    {
+      "name": "confirmation_webhook",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "send_confirmation_sms",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "method": "POST",
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "timeout": 3600
+      }
+    },
+    {
+      "name": "cancellation_webhook",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "send_cancellation_sms",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "method": "POST",
+        "url": "https://jsonplaceholder.typicode.com/posts",
+        "timeout": 3600
+      }
+    }
+  ],
+  "initial_state": "Trigger"
+}
