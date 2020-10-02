@@ -1,7 +1,7 @@
 import events from '@root/events';
 import NodeCache from 'node-cache';
 
-class Flow {
+class BotFlow {
   constructor(parties, flow) {
     this.parties = parties;
 
@@ -120,4 +120,5 @@ class Flow {
 
 }
 
-export default Flow;
+export default BotFlow;
+module.exports = BotFlow;

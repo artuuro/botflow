@@ -1,25 +1,23 @@
 {
   "name": "botflow",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "JavaScript (nodejs) library that accepts `Twilio Studio` alike JSON configuration files and provides the same functionality on an independent back-end service.",
   "main": "bin/index.js",
   "author": "Arthur G",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "repository": "https://github.com/artuuro/botflow",
   "scripts": {
     "prepare": "npm run build",
     "dev": "nodemon",
-    "test:survey": "yarn build && babel-node ./examples/bot-survey.js",
-    "test:appointment": "yarn build && babel-node ./examples/bot-appointment.js",
+    "test:survey": "yarn build && node ./examples/bot-survey.js",
+    "test:appointment": "yarn build && node ./examples/bot-appointment.js",
     "clean": "rimraf bin",
     "build": "babel ./src --out-dir bin"
   },
   "dependencies": {
     "handlebars": "^4.7.6",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1"
-  },
-  "devDependencies": {
+    "node-fetch": "^2.6.1",
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.7.2",
     "@babel/node": "^7.7.0",
@@ -27,7 +25,9 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/runtime": "^7.7.2",
     "babel-plugin-module-resolver": "^4.0.0",
-    "babel-preset-minify": "^0.5.1",
+    "babel-preset-minify": "^0.5.1"
+  },
+  "devDependencies": {
     "nodemon": "^1.19.4",
     "rimraf": "^3.0.0",
     "source-map": "^0.7.3"

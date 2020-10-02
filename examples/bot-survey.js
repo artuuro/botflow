@@ -1,5 +1,5 @@
-import BotFlow from '@root/bin';
-import Configuration from './json/bot-survey.json';
+const BotFlow = require('../bin');
+const Configuration = require('./json/bot-survey.json');
 
 const instance = new BotFlow(
   {
