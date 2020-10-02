@@ -1,12 +1,13 @@
 {
   "name": "botflow",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JavaScript (nodejs) library that accepts `Twilio Studio` alike JSON configuration files and provides the same functionality on an independent back-end service.",
-  "main": "src/index.js",
+  "main": "bin/index.js",
   "author": "Arthur G",
   "license": "MIT",
   "repository": "https://github.com/artuuro/botflow",
   "scripts": {
+    "prepare": "npm run build",
     "dev": "nodemon",
     "test:survey": "yarn build && babel-node ./examples/bot-survey.js",
     "test:appointment": "yarn build && babel-node ./examples/bot-appointment.js",
