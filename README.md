@@ -46,9 +46,8 @@ const instance = new BotFlow(
 
 
 #### TODOs:
-- Create npmjs package;
 - Write a documentation;
-- Improvements and more customization;
+- Improvements and more customization options;
 
 Notes: 
 - Project is heavily inspired by Twilio Studio and Chatflows as on https://www.twilio.com/console/studio.
