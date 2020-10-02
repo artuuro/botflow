@@ -1,6 +1,6 @@
 {
   "name": "botflow",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "JavaScript (nodejs) library that accepts `Twilio Studio` alike JSON configuration files and provides the same functionality on an independent back-end service.",
   "main": "bin/index.js",
   "author": "Arthur G",

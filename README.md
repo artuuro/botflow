@@ -15,6 +15,30 @@ JavaScript (nodejs) library that accepts `Twilio Studio` alike JSON configuratio
   - Run example survey: `yarn test:survey`;
   - Run example appointment: `yarn test:appointment`;
 
+- You can also `npm i botflow` then use following example:
+```
+const BotFlow = require('botflow');
+const Configuration = require('./JSON_CONFIG_FILE_PATH.json');
+
+const instance = new BotFlow(
+  {
+    From: 'SENDER_ID/NAME/REFERENCE',
+    To: 'RECEIVER_ID/NAME/REFERENCE'
+  }, 
+  Configuration
+);
+
+(async () => {
+  
+  const reply = await instance.query('start');
+
+  console.log(reply);
+
+  console.log(instance);
+ 
+})();
+```
+
 #### Libraries used:
 - `node-fetch` https://www.npmjs.com/package/node-fetch
 - `node-cache` https://www.npmjs.com/package/node-cache
