@@ -1,5 +1,4 @@
 # BotFlow
-JavaScript (nodejs) library that accepts `Twilio Studio` alike JSON configuration files and provides the same functionality on an independent back-end service.
 
 ### Features
 - Data gathering over a bot-conversation & sending to remotes;
